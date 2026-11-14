@@ -28,10 +28,14 @@ input::placeholder{color:#94a3b8}
 .filter{display:flex;gap:8px;margin-bottom:12px}
 .filter button{flex:1;border:0;border-radius:10px;padding:11px;font-weight:700;background:#334155;color:#fff;cursor:pointer}
 .filter button.active{background:#16a34a}
-.summary{display:flex;gap:10px;margin-bottom:12px}
+.summary{display:flex;gap:10px;margin-bottom:14px}
 .sum{flex:1;background:#0f172a;border-radius:12px;padding:12px;text-align:center}
 .sum small{color:#94a3b8;display:block}
 .sum b{font-size:17px}
+.bar-row{margin-bottom:10px}
+.bar-row small{display:flex;justify-content:space-between;margin-bottom:4px;color:#cbd5e1}
+.bar{height:18px;background:#0f172a;border-radius:20px;overflow:hidden}
+.bar-fill{height:100%;border-radius:20px}
 </style>
 </head>
 <body>
@@ -71,7 +75,14 @@ input::placeholder{color:#94a3b8}
 <div class="sum"><small>↗ Masuk</small><b id="totMasuk" style="color:#4ade80">Rp 0</b></div>
 <div class="sum"><small>↘ Keluar</small><b id="totKeluar" style="color:#f87171">Rp 0</b></div>
 </div>
-<div id="list"></div>
+
+<h3 style="margin:12px 0 10px;font-size:16px">📊 Grafik Masuk vs Keluar</h3>
+<div id="chartMasukKeluar"></div>
+
+<h3 style="margin:16px 0 10px;font-size:16px">💳 Grafik Cash / Transfer / QRIS (Masuk)</h3>
+<div id="chartMetode"></div>
+
+<div id="list" style="margin-top:14px"></div>
 <button class="clear" onclick="clearAll()">🗑️ Clear Semua / Reset Kas</button>
 </div>
 
@@ -91,25 +102,29 @@ function getFiltered(){
   return data.filter(d=>{
     let ts=d.ts||d.id||0;
     let dt=new Date(ts);
-    if(filter==='minggu'){
-      let seven=Date.now()-(7*24*60*60*1000);
-      return ts>=seven;
-    }
-    if(filter==='bulan'){
-      return dt.getMonth()===now.getMonth() && dt.getFullYear()===now.getFullYear();
-    }
+    if(filter==='minggu'){return ts>=Date.now()-(7*24*60*60*1000);}
+    if(filter==='bulan'){return dt.getMonth()===now.getMonth() && dt.getFullYear()===now.getFullYear();}
     return true;
   });
+}
+function bar(label,value,max,color){
+  let pct=max>0?Math.round(value/max*100):0;
+  return `<div class="bar-row"><small><span>${label}</span><span>${fmt(value)} (${pct}%)</span></small><div class="bar"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div></div>`;
 }
 function render(){
 let saldo=0;data.forEach(d=>{saldo+= d.type==='masuk'? d.nominal : -d.nominal});
 document.getElementById('saldo').innerText=fmt(saldo);
 document.getElementById('count').innerText=data.length+' transaksi';
 let filtered=getFiltered();
-let masuk=0,keluar=0;
-filtered.forEach(d=>{if(d.type==='masuk') masuk+=d.nominal; else keluar+=d.nominal;});
+let masuk=0,keluar=0;filtered.forEach(d=>{if(d.type==='masuk') masuk+=d.nominal; else keluar+=d.nominal;});
 document.getElementById('totMasuk').innerText=fmt(masuk);
 document.getElementById('totKeluar').innerText=fmt(keluar);
+let max1=Math.max(masuk,keluar,1);
+document.getElementById('chartMasukKeluar').innerHTML=bar('↗ Masuk',masuk,max1,'#16a34a')+bar('↘ Keluar',keluar,max1,'#dc2626');
+let cash=0,transfer=0,qris=0;
+filtered.forEach(d=>{if(d.type==='masuk'){if(d.metode==='Cash')cash+=d.nominal; if(d.metode==='Transfer')transfer+=d.nominal; if(d.metode==='QRIS')qris+=d.nominal;}});
+let max2=Math.max(cash,transfer,qris,1);
+document.getElementById('chartMetode').innerHTML=bar('💵 Cash',cash,max2,'#22c55e')+bar('🏦 Transfer',transfer,max2,'#3b82f6')+bar('📱 QRIS',qris,max2,'#f59e0b');
 let html='';
 [...filtered].reverse().forEach(d=>{
 html+=`<div class="item"><div><b>${d.ket}</b><small>${d.type} • ${d.metode||'-'} • ${d.tgl}</small></div><div style="text-align:right"><b>${d.type==='masuk'?'+':'-'}${fmt(d.nominal)}</b><br><button class="del" onclick="hapus(${d.id})">X Hapus</button></div></div>`;
