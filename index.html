@@ -3,161 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DKM AL IKHSAN - Kas Masjid</title>
+<title>Kas Masjid Al Ikhsan - Cengkudu</title>
 <style>
-*{box-sizing:border-box;font-family:system-ui,Arial,sans-serif}
-body{margin:0;background:#0f172a;color:#fff;padding:12px}
-.header{background:#16a34a;border-radius:16px;padding:18px}
-.header h1{margin:0;font-size:22px}
-.header p{margin:4px 0 0;opacity:.9;font-size:14px}
-.saldo{font-size:38px;font-weight:800;margin:14px 0 0}
-.btn-row{display:flex;gap:10px;margin:14px 0}
-.btn{flex:1;border:0;border-radius:12px;padding:14px;font-weight:700;font-size:16px;color:#fff;cursor:pointer}
-.in{background:#16a34a}.out{background:#dc2626}
-.btn.active{outline:3px solid #fff}
-.card{background:#1e293b;border-radius:16px;padding:16px;margin-bottom:14px}
-input,select{width:100%;padding:13px;border-radius:10px;border:0;background:#0f172a;color:#fff;margin-bottom:10px;font-size:16px}
-input::placeholder{color:#94a3b8}
-.save{background:#16a34a;color:#fff;border:0;padding:12px 22px;border-radius:10px;font-weight:700;font-size:16px}
-.item{background:#0f172a;border-radius:12px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.item b{font-size:18px}
-.item small{color:#94a3b8;display:block}
-.del{background:#dc2626;color:#fff;border:0;border-radius:8px;padding:8px 10px;font-weight:700}
-.clear{background:#334155;color:#fff;border:0;padding:10px 14px;border-radius:10px;width:100%;margin-top:10px}
-.wa{background:#16a34a;color:#fff;border:0;padding:13px;border-radius:10px;width:100%;font-weight:700;font-size:16px}
-.filter{display:flex;gap:8px;margin-bottom:12px}
-.filter button{flex:1;border:0;border-radius:10px;padding:11px;font-weight:700;background:#334155;color:#fff;cursor:pointer}
-.filter button.active{background:#16a34a}
-.summary{display:flex;gap:10px;margin-bottom:14px}
-.sum{flex:1;background:#0f172a;border-radius:12px;padding:12px;text-align:center}
-.sum small{color:#94a3b8;display:block}
-.sum b{font-size:17px}
-.bar-row{margin-bottom:10px}
-.bar-row small{display:flex;justify-content:space-between;margin-bottom:4px;color:#cbd5e1}
-.bar{height:18px;background:#0f172a;border-radius:20px;overflow:hidden}
-.bar-fill{height:100%;border-radius:20px}
+*{box-sizing:border-box;font-family:system-ui,Arial} body{margin:0;background:#f1f5f9;color:#111}
+.wrap{max-width:480px;margin:auto;padding:0 14px 40px}
+.header{background:#166534;color:#fff;padding:18px;border-radius:0 0 20px 20px;text-align:center}
+.header h1{margin:0;font-size:22px}.header p{margin:4px 0 0;opacity:.9;font-size:13px}
+.donasi{background:#dcfce7;border:2px solid #16a34a;border-radius:16px;padding:16px;margin:14px 0;text-align:center}
+.donasi b{font-size:18px;color:#166534}
+.donasi p{font-size:13px;color:#374151;margin:8px 0}
+.btn-wa{display:block;background:#16a34a;color:#fff;text-decoration:none;padding:13px;border-radius:12px;font-weight:800;margin-top:10px}
+.card{background:#fff;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.saldo{font-size:32px;font-weight:800;text-align:center}
+.row{display:flex;gap:10px}.col{flex:1;background:#f8fafc;border-radius:12px;padding:10px;text-align:center}
+.col small{color:#64748b}.masuk{color:#16a34a;font-weight:800}.keluar{color:#dc2626;font-weight:800}
+input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;font-size:15px}
+.btn{width:100%;padding:13px;border:0;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-simpan{background:#166534;color:#fff}
+.btn-rekap{background:#0ea5e9;color:#fff;margin-top:8px}
+.btn-hapus{background:#fee2e2;color:#dc2626;margin-top:8px}
+.item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
+.item small{color:#64748b;display:block}
+.badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#e0e7ff}
+.bar{height:10px;background:#e5e7eb;border-radius:10px;overflow:hidden;display:flex;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="header">
-<h1>🕌 DKM AL IKHSAN</h1>
-<p>Masjid Al Makmur - Cirahab, Lumbir, Banyumas</p>
-<div style="margin-top:16px">Saldo Kas Total</div>
+<div class="wrap">
+<div class="header"><h1>🕌 Masjid Al Ikhsan</h1><p>Cengkudu - Kas & Donasi</p></div>
+
+<!-- DONASI -->
+<div class="donasi">
+<b>💚 MAU DONASI?</b>
+<p>Untuk pembangunan & operasional Masjid Al Ikhsan.<br>Konfirmasi via WA Ketua, nanti dikasih info Rekening / QRIS.</p>
+<a class="btn-wa" target="_blank" href="https://wa.me/6283863945761?text=Assalamualaikum%20Pak%20Ketua%2C%20saya%20mau%20donasi%20untuk%20Masjid%20Al%20Ikhsan.%20Mohon%20info%20rekening%20%2F%20QRIS-nya.">📲 Konfirmasi Donasi via WA Ketua</a>
+<div style="font-size:11px;color:#6b7280;margin-top:8px">Ketua DKM Masjid Al Ikhsan</div>
+</div>
+
+<!-- SALDO -->
+<div class="card">
+<div style="text-align:center;color:#64748b">Saldo Kas Saat Ini</div>
 <div class="saldo" id="saldo">Rp 0</div>
-<div id="count">0 transaksi</div>
+<div class="row" style="margin-top:10px">
+<div class="col"><small>Total Masuk</small><div class="masuk" id="tMasuk">Rp 0</div></div>
+<div class="col"><small>Total Keluar</small><div class="keluar" id="tKeluar">Rp 0</div></div>
 </div>
-
-<div class="btn-row">
-<button class="btn in active" id="btnMasuk" onclick="setType('masuk')">+ Pemasukan</button>
-<button class="btn out" id="btnKeluar" onclick="setType('keluar')">- Pengeluaran</button>
-</div>
-
-<div class="card">
-<h3 style="margin:0 0 12px">Tambah Transaksi</h3>
-<input id="ket" placeholder="Keterangan, cth: Infaq Jumat">
-<input id="nom" type="number" placeholder="Nominal Rp">
-<select id="metode">
-<option value="Cash">💵 Cash</option>
-<option value="Transfer">🏦 Transfer</option>
-<option value="QRIS">📱 QRIS</option>
-</select>
-<button class="save" onclick="simpan()">Simpan</button>
-</div>
-
-<div class="card">
-<h3 style="margin:0 0 12px">🧾 Laporan</h3>
-<div class="filter">
-<button id="fSemua" class="active" onclick="setFilter('semua')">Semua</button>
-<button id="fMinggu" onclick="setFilter('minggu')">Minggu Ini</button>
-<button id="fBulan" onclick="setFilter('bulan')">Bulan Ini</button>
-</div>
-<div class="summary">
-<div class="sum"><small>↗ Masuk</small><b id="totMasuk" style="color:#4ade80">Rp 0</b></div>
-<div class="sum"><small>↘ Keluar</small><b id="totKeluar" style="color:#f87171">Rp 0</b></div>
-</div>
-
-<h3 style="margin:12px 0 10px;font-size:16px">📊 Grafik Masuk vs Keluar</h3>
-<div id="chartMasukKeluar"></div>
-
-<h3 style="margin:16px 0 10px;font-size:16px">💳 Grafik Cash / Transfer / QRIS (Masuk)</h3>
-<div id="chartMetode"></div>
-
-<div id="list" style="margin-top:14px"></div>
-<button class="clear" onclick="clearAll()">🗑️ Clear Semua / Reset Kas</button>
-</div>
-
-<div class="card">
-<button class="wa" onclick="kirimWA()">📱 Kirim Rekap ke WA</button>
-</div>
-
-<script>
-let type='masuk';
-let filter='semua';
-let data=JSON.parse(localStorage.getItem('kasMasjid')||'[]');
-function setType(t){type=t;document.getElementById('btnMasuk').classList.toggle('active',t==='masuk');document.getElementById('btnKeluar').classList.toggle('active',t==='keluar');}
-function setFilter(f){filter=f;document.getElementById('fSemua').classList.toggle('active',f==='semua');document.getElementById('fMinggu').classList.toggle('active',f==='minggu');document.getElementById('fBulan').classList.toggle('active',f==='bulan');render();}
-function fmt(n){return 'Rp '+n.toLocaleString('id-ID')}
-function getFiltered(){
-  let now=new Date();
-  return data.filter(d=>{
-    let ts=d.ts||d.id||0;
-    let dt=new Date(ts);
-    if(filter==='minggu'){return ts>=Date.now()-(7*24*60*60*1000);}
-    if(filter==='bulan'){return dt.getMonth()===now.getMonth() && dt.getFullYear()===now.getFullYear();}
-    return true;
-  });
-}
-function bar(label,value,max,color){
-  let pct=max>0?Math.round(value/max*100):0;
-  return `<div class="bar-row"><small><span>${label}</span><span>${fmt(value)} (${pct}%)</span></small><div class="bar"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div></div>`;
-}
-function render(){
-let saldo=0;data.forEach(d=>{saldo+= d.type==='masuk'? d.nominal : -d.nominal});
-document.getElementById('saldo').innerText=fmt(saldo);
-document.getElementById('count').innerText=data.length+' transaksi';
-let filtered=getFiltered();
-let masuk=0,keluar=0;filtered.forEach(d=>{if(d.type==='masuk') masuk+=d.nominal; else keluar+=d.nominal;});
-document.getElementById('totMasuk').innerText=fmt(masuk);
-document.getElementById('totKeluar').innerText=fmt(keluar);
-let max1=Math.max(masuk,keluar,1);
-document.getElementById('chartMasukKeluar').innerHTML=bar('↗ Masuk',masuk,max1,'#16a34a')+bar('↘ Keluar',keluar,max1,'#dc2626');
-let cash=0,transfer=0,qris=0;
-filtered.forEach(d=>{if(d.type==='masuk'){if(d.metode==='Cash')cash+=d.nominal; if(d.metode==='Transfer')transfer+=d.nominal; if(d.metode==='QRIS')qris+=d.nominal;}});
-let max2=Math.max(cash,transfer,qris,1);
-document.getElementById('chartMetode').innerHTML=bar('💵 Cash',cash,max2,'#22c55e')+bar('🏦 Transfer',transfer,max2,'#3b82f6')+bar('📱 QRIS',qris,max2,'#f59e0b');
-let html='';
-[...filtered].reverse().forEach(d=>{
-html+=`<div class="item"><div><b>${d.ket}</b><small>${d.type} • ${d.metode||'-'} • ${d.tgl}</small></div><div style="text-align:right"><b>${d.type==='masuk'?'+':'-'}${fmt(d.nominal)}</b><br><button class="del" onclick="hapus(${d.id})">X Hapus</button></div></div>`;
-});
-document.getElementById('list').innerHTML=html||'<p style="color:#94a3b8">Belum ada transaksi di periode ini</p>';
-}
-function simpan(){
-let ket=document.getElementById('ket').value.trim();
-let nom=parseInt(document.getElementById('nom').value);
-let metode=document.getElementById('metode').value;
-if(!ket||!nom){alert('Isi keterangan & nominal dulu, Broo');return;}
-let now=Date.now();
-data.push({id:now,ts:now,ket,nominal:nom,type,metode,tgl:new Date().toLocaleDateString('id-ID')});
-localStorage.setItem('kasMasjid',JSON.stringify(data));
-document.getElementById('ket').value='';document.getElementById('nom').value='';
-render();alert('Tersimpan!');
-}
-function hapus(id){if(confirm('Hapus transaksi ini?')){data=data.filter(d=>d.id!==id);localStorage.setItem('kasMasjid',JSON.stringify(data));render();}}
-function clearAll(){if(confirm('Yakin hapus SEMUA transaksi? Saldo jadi 0.')){data=[];localStorage.setItem('kasMasjid',JSON.stringify(data));render();}}
-function kirimWA(){
-let filtered=getFiltered();
-let masuk=0,keluar=0;filtered.forEach(d=>{if(d.type==='masuk') masuk+=d.nominal; else keluar+=d.nominal;});
-let saldo=0;data.forEach(d=>{saldo+= d.type==='masuk'? d.nominal : -d.nominal});
-let label=filter==='semua'?'SEMUA':filter==='minggu'?'MINGGU INI':'BULAN INI';
-let teks='*REKAP KAS MASJID AL IKHSAN - '+label+'*%0A';
-teks+='Masjid Al Makmur - Cirahab, Lumbir, Banyumas%0A';
-teks+='Saldo Total: '+fmt(saldo)+'%0A';
-teks+='Masuk ('+label+'): '+fmt(masuk)+'%0A';
-teks+='Keluar ('+label+'): '+fmt(keluar)+'%0A%0A';
-filtered.forEach(d=>{teks+=`${d.type==='masuk'?'+':'-'} ${fmt(d.nominal)} - ${d.ket} (${d.metode||'-'})%0A`;});
-window.open('https://wa.me/?text='+teks,'_blank');
-}
-render();
-</script>
-</body>
-</html>
+<div class="bar">
