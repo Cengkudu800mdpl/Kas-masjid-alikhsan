@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kas Masjid Al Ikhsan</title>
+<style>body{margin:0;font-family:Arial;background:#0f172a;color:#fff;padding:14px}
+.top{background:#16a34a;border-radius:14px;padding:16px}
+.saldo{font-size:32px;font-weight:900}
+.btn{flex:1;border:0;border-radius:10px;padding:13px;font-weight:800;color:#fff}
+.card{background:#1e293b;border-radius:12px;padding:14px;margin:12px 0}
+input{width:100%;padding:12px;border-radius:10px;border:0;margin:6px 0;background:#0f172a;color:#fff}
+.item{display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:8px}
+</style></head><body>
+<div class="top"><b>🕌 DKM AL IKHSAN</b><br><small>Masjid Al Makmur - Cirahab, Lumbir, Banyumas</small><br><br>Saldo Kas<div class="saldo" id="saldo">Rp 0</div><div id="jml">0 transaksi</div></div>
+<div style="display:flex;gap:10px;margin:12px 0"><button class="btn" style="background:#16a34a" onclick="tambah('masuk')">+ Pemasukan</button><button class="btn" style="background:#dc2626" onclick="tambah('keluar')">- Pengeluaran</button></div>
+<div class="card"><b>Tambah Transaksi</b><input id="nama" placeholder="Keterangan, cth: Infaq Jumat"><input id="nominal" type="number" placeholder="Nominal Rp"><button class="btn" style="background:#16a34a" onclick="simpan()">Simpan</button></div>
+<div class="card"><b>🧾 Transaksi Terbaru</b><div id="list">Belum ada transaksi</div></div>
+<div class="card"><button class="btn" style="background:#16a34a" onclick="kirimWA()">📲 Kirim Rekap ke WA</button></div>
+<script>
+var data=JSON.parse(localStorage.getItem('kas')||'[]');var jenis='masuk';
+function rupiah(n){return 'Rp '+n.toLocaleString('id-ID')}
+function tambah(j){jenis=j;alert('Mode: '+j+' - isi form lalu Simpan')}
+function tampil(){var m=0,k=0;for(var i=0;i<data.length;i++){if(data[i].jenis=='masuk')m+=data[i].nominal;else k+=data[i].nominal}
+document.getElementById('saldo').innerText=rupiah(m-k);
+document.getElementById('jml').innerText=data.length+' transaksi';
+var h='';if(!data.length)h='Belum ada transaksi';
+for(var j=data.length-1;j>=0;j--){var d=data[j];h+='<div class="item"><div><b>'+d.nama+'</b><br><small>'+d.jenis+'</small></div><b>'+(d.jenis=='masuk'?'+':'-')+rupiah(d.nominal)+'</b></div>'}
+document.getElementById('list').innerHTML=h;localStorage.setItem('kas',JSON.stringify(data))}
+function simpan(){var n=document.getElementById('nominal').value;if(!n){alert('Isi nominal dulu!');return}data.push({nama:document.getElementById('nama').value||'Transaksi',jenis:jenis,nominal:parseInt(n)});document.getElementById('nama').value='';document.getElementById('nominal').value='';tampil()}
+function kirimWA(){var m=0,k=0;for(var i=0;i<data.length;i++){if(data[i].jenis=='masuk')m+=data[i].nominal;else k+=data[i].nominal}window.open('https://wa.me/?text='+encodeURIComponent('LAPORAN KAS AL IKHSAN\nMasuk: '+rupiah(m)+'\nKeluar: '+rupiah(k)+'\nSaldo: '+rupiah(m-k)))}
+tampil();
+</script></body></html>
