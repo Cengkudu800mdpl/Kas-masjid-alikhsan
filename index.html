@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DKM Al Ikhsan - Kas & Donasi</title>
+<title>DKM Al Ikhsan - Kas & Donasi Masjid Al Makmur</title>
+<meta property="og:title" content="DKM AL IKHSAN - Kas & Donasi Masjid Al Makmur">
+<meta property="og:description" content="Cek kas, donasi & laporan Masjid Al Makmur, Desa Cirahab, Lumbir, Banyumas. Transparan & update.">
 <style>
 *{box-sizing:border-box;font-family:system-ui,Arial}
 body{margin:0;background:#0f172a;color:#fff}
@@ -40,13 +42,13 @@ input,select{width:100%;padding:12px;border:1px solid #334155;border-radius:10px
 </head>
 <body>
 <div class="wrap">
-<div class="header"><h1>🕌 DKM AL IKHSAN</h1><p>Masjid Al Ikhsan - Cengkudu, Cirahab, Lumbir, Banyumas</p><div style="margin-top:8px;opacity:.9">Saldo Kas Total</div><div class="saldo" id="saldo">Rp 0</div><div id="jml">0 transaksi</div></div>
-<div class="donasi"><b>💚 MAU DONASI?</b><p>Untuk pembangunan & operasional Masjid Al Ikhsan.<br>Konfirmasi via WA Ketua, nanti dikasih info Rekening / QRIS.</p><a class="btn-wa" target="_blank" href="https://wa.me/6283863945761?text=Assalamualaikum%20Pak%20Ketua%2C%20saya%20mau%20donasi%20untuk%20Masjid%20Al%20Ikhsan.%20Mohon%20info%20rekening%20%2F%20QRIS-nya.">📲 Konfirmasi Donasi via WA Ketua</a><div style="font-size:11px;color:#6b7280;margin-top:8px">Ketua DKM Masjid Al Ikhsan</div></div>
+<div class="header"><h1>🕌 DKM AL IKHSAN</h1><p>Masjid Al Makmur - Desa Cirahab, Lumbir, Banyumas</p><div style="margin-top:8px;opacity:.9">Saldo Kas Total</div><div class="saldo" id="saldo">Rp 0</div><div id="jml">0 transaksi</div></div>
+<div class="donasi"><b>💚 MAU DONASI?</b><p>Untuk pembangunan & operasional Masjid Al Makmur.<br>Konfirmasi via WA Ketua, nanti dikasih info Rekening / QRIS.</p><a class="btn-wa" target="_blank" href="https://wa.me/6283863945761?text=Assalamualaikum%20Pak%20Ketua%2C%20saya%20mau%20donasi%20untuk%20Masjid%20Al%20Makmur.%20Mohon%20info%20rekening%20%2F%20QRIS-nya.">📲 Konfirmasi Donasi via WA Ketua</a><div style="font-size:11px;color:#6b7280;margin-top:8px">Ketua DKM Masjid Al Makmur</div></div>
 <div class="row"><button class="btn-big btn-masuk" onclick="setJenis('masuk')">+ Pemasukan</button><button class="btn-big btn-keluar" onclick="setJenis('keluar')">- Pengeluaran</button></div>
 <div class="card"><b>Tambah Transaksi</b><select id="jenis"><option value="masuk">✅ Pemasukan / Donasi Masuk</option><option value="keluar">❌ Pengeluaran</option></select><input id="ket" placeholder="Keterangan, cth: Infaq Jumat / Donasi Hamba Allah"><input id="nominal" type="number" placeholder="Nominal Rp, cth: 50000"><select id="kategori"><option>Donasi</option><option>Infaq Jumat</option><option>Kotak Amal</option><option>Listrik / Air</option><option>Kebersihan</option><option>Pembangunan</option><option>Lainnya</option></select><select id="metode"><option>Cash</option><option>Transfer</option><option>QRIS</option></select><input id="tanggal" type="date"><button class="btn btn-simpan" onclick="simpan()">Simpan</button><button class="btn btn-rekap" onclick="rekapWA()">📤 Kirim Rekap ke WA Ketua</button></div>
 <div class="card"><b>📋 Laporan</b><div class="filter"><button id="fSemua" class="on" onclick="setFilter('semua')">Semua</button><button id="fMinggu" onclick="setFilter('minggu')">Minggu Ini</button><button id="fBulan" onclick="setFilter('bulan')">Bulan Ini</button></div><div class="mini"><div><small>Masuk</small><div class="masuk" id="tMasuk">Rp 0</div></div><div><small>Keluar</small><div class="keluar" id="tKeluar">Rp 0</div></div></div><div style="margin-top:12px"><b>📊 Grafik Masuk vs Keluar</b><div class="bar"><div id="barMasuk" style="background:#16a34a"></div><div id="barKeluar" style="background:#dc2626"></div></div></div></div>
 <div class="card"><b>Riwayat Transaksi</b><div id="list"></div><button class="btn" style="background:#fee2e2;color:#dc2626;margin-top:8px" onclick="hapusSemua()">🗑️ Hapus Semua Data</button></div>
-<p style="text-align:center;font-size:12px;color:#94a3b8">1 App untuk Kas + Donasi DKM Al Ikhsan.<br>Data tersimpan di HP, rekap via WA.</p>
+<p style="text-align:center;font-size:12px;color:#94a3b8">1 App untuk Kas + Donasi DKM Al Ikhsan.<br>Masjid Al Makmur, Desa Cirahab, Lumbir, Banyumas.<br>Data tersimpan di HP, rekap via WA.</p>
 </div>
 <script>
 let data = JSON.parse(localStorage.getItem('kasAlIkhsan') || '[]');
@@ -94,7 +96,7 @@ document.getElementById('barKeluar').style.width=(tk/tot*100)+'%';
 function hapus(i){ if(confirm('Hapus transaksi ini?')){ data.splice(i,1); localStorage.setItem('kasAlIkhsan', JSON.stringify(data)); render(); } }
 function hapusSemua(){ if(confirm('Hapus semua data?')){ data=[]; localStorage.removeItem('kasAlIkhsan'); render(); } }
 function rekapWA(){
-let tm=0, tk=0; let teks='*REKAP KAS DKM AL IKHSAN*%0A%0A';
+let tm=0, tk=0; let teks='*REKAP KAS DKM AL IKHSAN - MASJID AL MAKMUR*%0A%0A';
 data.slice().reverse().forEach(d=>{ if(d.j=='masuk') tm+=d.n; else tk+=d.n; teks += (d.j=='masuk'?'MASUK ':'KELUAR ') + d.t + ' - ' + d.k + ' : ' + fmt(d.n) + '%0A'; });
 teks += '%0A*Total Masuk:* ' + fmt(tm) + '%0A*Total Keluar:* ' + fmt(tk) + '%0A*SALDO:* ' + fmt(tm-tk);
 window.open('https://wa.me/6283863945761?text=' + teks, '_blank');
