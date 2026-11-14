@@ -3,15 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kas Masjid Al Ikhsan - Cengkudu</title>
+<title>DKM Al Ikhsan - Kas & Donasi</title>
 <style>
 *{box-sizing:border-box;font-family:system-ui,Arial}
-body{margin:0;background:#f1f5f9;color:#111}
-.wrap{max-width:480px;margin:auto;padding:0 14px 40px}
-.header{background:#166534;color:#fff;padding:18px;border-radius:0 0 20px 20px;text-align:center}
+body{margin:0;background:#0f172a;color:#fff}
+.wrap{max-width:480px;margin:auto;padding:14px 14px 40px}
+.header{background:#16a34a;padding:18px;border-radius:20px}
 .header h1{margin:0;font-size:22px}
 .header p{margin:4px 0 0;opacity:.9;font-size:13px}
-.donasi{background:#dcfce7;border:2px solid #16a34a;border-radius:16px;padding:16px;margin:14px 0;text-align:center}
+.header .saldo{font-size:36px;font-weight:900;margin-top:10px}
+.donasi{background:#dcfce7;color:#111;border:2px solid #16a34a;border-radius:16px;padding:16px;margin:14px 0;text-align:center}
 .donasi b{font-size:18px;color:#166534}
 .donasi p{font-size:13px;color:#374151;margin:8px 0}
-.btn-wa{display:block;background:#16a34a;color:#fff;text-decoration:none;padding:13px
+.btn-wa{display:block;background:#16a34a;color:#fff;text-decoration:none;padding:13px;border-radius:12px;font-weight:800;margin-top:10px}
+.row{display:flex;gap:10px;margin:14px 0}
+.btn-big{flex:1;padding:14px;border:0;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-masuk{background:#16a34a;color:#fff}
+.btn-keluar{background:#dc2626;color:#fff}
+.card{background:#1e293b;border-radius:16px;padding:16px;margin:12px 0}
+.card b{font-size:17px}
+input,select{width:100%;padding:12px;border:1px solid #334155;border-radius:10px;margin:6px 0;font-size:15px;background:#0f172a;color:#fff}
+.btn{width:100%;padding:13px;border:0;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-simpan{background:#16a34a;color:#fff}
+.btn-rekap{background:#0ea5e9;color:#fff;margin-top:8px}
+.filter{display:flex;gap:8px;margin:10px 0}
+.filter button{flex:1;padding:10px;border:0;border-radius:10px;background:#334155;color:#fff;cursor:pointer}
+.filter button.on{background:#16a34a}
+.mini{display:flex;gap:10px}
+.mini div{flex:1;background:#0f172a;border-radius:12px;padding:12px;text-align:center}
+.masuk{color:#4ade80;font-weight:800}
+.keluar{color:#f87171;font-weight:800}
+.item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #334155;font-size:14px}
+.item small{color:#94a3b8;display:block}
+.bar{height:12px;background:#334155;border-radius:10px;overflow:hidden;display:flex;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header"><h1>🕌 DKM AL IKHSAN</h1><p>Masjid Al Ikhsan - Cengkudu, Cirahab, Lumbir, Banyumas</p><div style="margin-top:8px;opacity:.9">Saldo Kas Total</div><div class="saldo" id="saldo">Rp 0</div><div id="jml">0 transaksi</div></div>
+<div class="donasi"><b>💚 MAU DONASI?</b><p>Untuk pembangunan & operasional Masjid Al Ikhsan.<br>Konfirmasi via WA Ketua, nanti dikasih info Rekening / QRIS.</p><a class="btn-wa" target="_blank" href="https://wa.me/6283863945761?text=Assalamualaikum%20Pak%20Ketua%2C%20saya%20mau%20donasi%20untuk%20Masjid%20Al%20Ikhsan.%20Mohon%20info%20rekening%20%2F%20QRIS-nya.">📲 Konfirmasi Donasi via WA Ketua</a><div style="font-size:11px;color:#6b7280;margin-top:8px">Ketua DKM Masjid Al Ikhsan</div></div>
+<div class="row"><button class="btn-big btn-masuk" onclick="setJenis('masuk')">+ Pemasukan</button><button class="btn-big btn-keluar" onclick="setJenis('keluar')">- Pengeluaran</button></div>
+<div class="card"><b>Tambah Transaksi</b><select id="jenis"><option value="masuk">✅ Pemasukan / Donasi Masuk</option><option value="keluar">❌ Pengeluaran</option></select><input id="ket" placeholder="Keterangan, cth: Infaq Jumat / Donasi Hamba Allah"><input id="nominal" type="number" placeholder="Nominal Rp, cth: 50000"><select id="kategori"><option>Donasi</option><option>Infaq Jumat</option><option>Kotak Amal</option><option>Listrik / Air</option><option>Kebersihan</option><option>Pembangunan</option><option>Lainnya</option></select><select id="metode"><option>Cash</option><option>Transfer</option><option>QRIS</option></select><input id="tanggal" type="date"><button class="btn btn-simpan" onclick="simpan()">Simpan</button><button class="btn btn-rekap" onclick="rekapWA()">📤 Kirim Rekap ke WA Ketua</button></div>
+<div class="card"><b>📋 Laporan</b><div class="filter"><button id="fSemua" class="on" onclick="setFilter('semua')">Semua</button><button id="fMinggu" onclick="setFilter('minggu')">Minggu Ini</button><button id="fBulan" onclick="setFilter('bulan')">Bulan Ini</button></div><div class="mini"><div><small>Masuk</small><div class="masuk" id="tMasuk">Rp 0</div></div><div><small>Keluar</small><div class="keluar" id="tKeluar">Rp 0</div></div></div><div style="margin-top:12px"><b>📊 Grafik Masuk vs Keluar</b><div class="bar"><div id="barMasuk" style="background:#16a34a"></div><div id="barKeluar" style="background:#dc2626"></div></div></div></div>
+<div class="card"><b>Riwayat Transaksi</b><div id="list"></div><button class="btn" style="background:#fee2e2;color:#dc2626;margin-top:8px" onclick="hapusSemua()">🗑️ Hapus Semua Data</button></div>
+<p style="text-align:center;font-size:12px;color:#94a3b8">1 App untuk Kas + Donasi DKM Al Ikhsan.<br>Data tersimpan di HP, rekap via WA.</p>
+</div>
+<script>
+let data = JSON.parse(localStorage.getItem('kasAlIkhsan') || '[]');
+let filter = 'semua';
+document.getElementById('tanggal').valueAsDate = new Date();
+function fmt(n){ return 'Rp ' + Number(n||0).toLocaleString('id-ID'); }
+function setJenis(v){ document.getElementById('jenis').value = v; window.scrollTo({top:350,behavior:'smooth'}); }
+function setFilter(f){ filter=f; document.getElementById('fSemua').className = f=='semua'?'on':''; document.getElementById('fMinggu').className = f=='minggu'?'on':''; document.getElementById('fBulan').className = f=='bulan'?'on':''; render(); }
+function simpan(){
+let j=document.getElementById('jenis').value;
+let k=document.getElementById('ket').value;
+let n=parseInt(document.getElementById('nominal').value);
+let kat=document.getElementById('kategori').value;
+let m=document.getElementById('metode').value;
+let t=document.getElementById('tanggal').value;
+if(!k||!n){ alert('Isi keterangan & nominal dulu'); return; }
+data.unshift({j,k,n,kat,m,t});
+localStorage.setItem('kasAlIkhsan', JSON.stringify(data));
+document.getElementById('ket').value=''; document.getElementById('nominal').value='';
+render();
+}
+function filterData(){
+let now=new Date(); let out=data;
+if(filter=='minggu'){ let day=now.getDay(); let monday=new Date(now); monday.setDate(now.getDate() - (day==0?6:day-1)); monday.setHours(0,0,0,0); out=data.filter(d=> new Date(d.t) >= monday); }
+if(filter=='bulan'){ out=data.filter(d=>{ let dd=new Date(d.t); return dd.getMonth()==now.getMonth() && dd.getFullYear()==now.getFullYear(); }); }
+return out;
+}
+function render(){
+let tmAll=0, tkAll=0; data.forEach(d=>{ if(d.j=='masuk') tmAll+=d.n; else tkAll+=d.n; });
+let list=filterData(); let tm=0, tk=0, html='';
+list.forEach(d=>{
+let idx=data.indexOf(d);
+if(d.j=='masuk') tm+=d.n; else tk+=d.n;
+html += '<div class="item"><div><b>' + d.k + '</b><small>' + d.t + ' - ' + d.kat + ' - ' + d.m + '</small></div><div style="text-align:right"><b class="' + (d.j=='masuk'?'masuk':'keluar') + '">' + (d.j=='masuk'?'+ ':'- ') + fmt(d.n) + '</b><br><a href="#" onclick="hapus(' + idx + ');return false" style="font-size:11px;color:#f87171">hapus</a></div></div>';
+});
+document.getElementById('list').innerHTML = html || '<p style="color:#94a3b8;text-align:center">Belum ada transaksi</p>';
+document.getElementById('saldo').innerText = fmt(tmAll-tkAll);
+document.getElementById('jml').innerText = data.length + ' transaksi';
+document.getElementById('tMasuk').innerText = fmt(tm);
+document.getElementById('tKeluar').innerText = fmt(tk);
+let tot=tm+tk||1;
+document.getElementById('barMasuk').style.width=(tm/tot*100)+'%';
+document.getElementById('barKeluar').style.width=(tk/tot*100)+'%';
+}
+function hapus(i){ if(confirm('Hapus transaksi ini?')){ data.splice(i,1); localStorage.setItem('kasAlIkhsan', JSON.stringify(data)); render(); } }
+function hapusSemua(){ if(confirm('Hapus semua data?')){ data=[]; localStorage.removeItem('kasAlIkhsan'); render(); } }
+function rekapWA(){
+let tm=0, tk=0; let teks='*REKAP KAS DKM AL IKHSAN*%0A%0A';
+data.slice().reverse().forEach(d=>{ if(d.j=='masuk') tm+=d.n; else tk+=d.n; teks += (d.j=='masuk'?'MASUK ':'KELUAR ') + d.t + ' - ' + d.k + ' : ' + fmt(d.n) + '%0A'; });
+teks += '%0A*Total Masuk:* ' + fmt(tm) + '%0A*Total Keluar:* ' + fmt(tk) + '%0A*SALDO:* ' + fmt(tm-tk);
+window.open('https://wa.me/6283863945761?text=' + teks, '_blank');
+}
+render();
+</script>
+</body>
+</html>
