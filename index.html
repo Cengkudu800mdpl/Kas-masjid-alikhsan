@@ -1,31 +1,105 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kas Masjid Al Ikhsan</title>
-<style>body{margin:0;font-family:Arial;background:#0f172a;color:#fff;padding:14px}
-.top{background:#16a34a;border-radius:14px;padding:16px}
-.saldo{font-size:32px;font-weight:900}
-.btn{flex:1;border:0;border-radius:10px;padding:13px;font-weight:800;color:#fff}
-.card{background:#1e293b;border-radius:12px;padding:14px;margin:12px 0}
-input{width:100%;padding:12px;border-radius:10px;border:0;margin:6px 0;background:#0f172a;color:#fff}
-.item{display:flex;justify-content:space-between;background:#0f172a;padding:10px;border-radius:10px;margin-bottom:8px}
-</style></head><body>
-<div class="top"><b>🕌 DKM AL IKHSAN</b><br><small>Masjid Al Makmur - Cirahab, Lumbir, Banyumas</small><br><br>Saldo Kas<div class="saldo" id="saldo">Rp 0</div><div id="jml">0 transaksi</div></div>
-<div style="display:flex;gap:10px;margin:12px 0"><button class="btn" style="background:#16a34a" onclick="tambah('masuk')">+ Pemasukan</button><button class="btn" style="background:#dc2626" onclick="tambah('keluar')">- Pengeluaran</button></div>
-<div class="card"><b>Tambah Transaksi</b><input id="nama" placeholder="Keterangan, cth: Infaq Jumat"><input id="nominal" type="number" placeholder="Nominal Rp"><button class="btn" style="background:#16a34a" onclick="simpan()">Simpan</button></div>
-<div class="card"><b>🧾 Transaksi Terbaru</b><div id="list">Belum ada transaksi</div></div>
-<div class="card"><button class="btn" style="background:#16a34a" onclick="kirimWA()">📲 Kirim Rekap ke WA</button></div>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DKM AL IKHSAN - Kas Masjid</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,Arial,sans-serif}
+body{margin:0;background:#0f172a;color:#fff;padding:12px}
+.header{background:#16a34a;border-radius:16px;padding:18px}
+.header h1{margin:0;font-size:22px}
+.header p{margin:4px 0 0;opacity:.9;font-size:14px}
+.saldo{font-size:38px;font-weight:800;margin:14px 0 0}
+.btn-row{display:flex;gap:10px;margin:14px 0}
+.btn{flex:1;border:0;border-radius:12px;padding:14px;font-weight:700;font-size:16px;color:#fff;cursor:pointer}
+.in{background:#16a34a}.out{background:#dc2626}
+.btn.active{outline:3px solid #fff}
+.card{background:#1e293b;border-radius:16px;padding:16px;margin-bottom:14px}
+input,select{width:100%;padding:13px;border-radius:10px;border:0;background:#0f172a;color:#fff;margin-bottom:10px;font-size:16px}
+input::placeholder{color:#94a3b8}
+.save{background:#16a34a;color:#fff;border:0;padding:12px 22px;border-radius:10px;font-weight:700;font-size:16px}
+.item{background:#0f172a;border-radius:12px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item b{font-size:18px}
+.item small{color:#94a3b8;display:block}
+.del{background:#dc2626;color:#fff;border:0;border-radius:8px;padding:8px 10px;font-weight:700}
+.clear{background:#334155;color:#fff;border:0;padding:10px 14px;border-radius:10px;width:100%;margin-top:10px}
+.wa{background:#16a34a;color:#fff;border:0;padding:13px;border-radius:10px;width:100%;font-weight:700;font-size:16px}
+.badge{background:#334155;padding:3px 8px;border-radius:20px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>🕌 DKM AL IKHSAN</h1>
+<p>Masjid Al Makmur - Cirahab, Lumbir, Banyumas</p>
+<div style="margin-top:16px">Saldo Kas</div>
+<div class="saldo" id="saldo">Rp 0</div>
+<div id="count">0 transaksi</div>
+</div>
+
+<div class="btn-row">
+<button class="btn in active" id="btnMasuk" onclick="setType('masuk')">+ Pemasukan</button>
+<button class="btn out" id="btnKeluar" onclick="setType('keluar')">- Pengeluaran</button>
+</div>
+
+<div class="card">
+<h3 style="margin:0 0 12px">Tambah Transaksi</h3>
+<input id="ket" placeholder="Keterangan, cth: Infaq Jumat">
+<input id="nom" type="number" placeholder="Nominal Rp">
+<select id="metode">
+<option value="Cash">💵 Cash</option>
+<option value="Transfer">🏦 Transfer</option>
+<option value="QRIS">📱 QRIS</option>
+</select>
+<button class="save" onclick="simpan()">Simpan</button>
+</div>
+
+<div class="card">
+<h3 style="margin:0 0 12px">🧾 Transaksi Terbaru</h3>
+<div id="list"></div>
+<button class="clear" onclick="clearAll()">🗑️ Clear Semua / Reset Kas</button>
+</div>
+
+<div class="card">
+<button class="wa" onclick="kirimWA()">📱 Kirim Rekap ke WA</button>
+</div>
+
 <script>
-var data=JSON.parse(localStorage.getItem('kas')||'[]');var jenis='masuk';
-function rupiah(n){return 'Rp '+n.toLocaleString('id-ID')}
-function tambah(j){jenis=j;alert('Mode: '+j+' - isi form lalu Simpan')}
-function tampil(){var m=0,k=0;for(var i=0;i<data.length;i++){if(data[i].jenis=='masuk')m+=data[i].nominal;else k+=data[i].nominal}
-document.getElementById('saldo').innerText=rupiah(m-k);
-document.getElementById('jml').innerText=data.length+' transaksi';
-var h='';if(!data.length)h='Belum ada transaksi';
-for(var j=data.length-1;j>=0;j--){var d=data[j];h+='<div class="item"><div><b>'+d.nama+'</b><br><small>'+d.jenis+'</small></div><b>'+(d.jenis=='masuk'?'+':'-')+rupiah(d.nominal)+'</b></div>'}
-document.getElementById('list').innerHTML=h;localStorage.setItem('kas',JSON.stringify(data))}
-function simpan(){var n=document.getElementById('nominal').value;if(!n){alert('Isi nominal dulu!');return}data.push({nama:document.getElementById('nama').value||'Transaksi',jenis:jenis,nominal:parseInt(n)});document.getElementById('nama').value='';document.getElementById('nominal').value='';tampil()}
-function kirimWA(){var m=0,k=0;for(var i=0;i<data.length;i++){if(data[i].jenis=='masuk')m+=data[i].nominal;else k+=data[i].nominal}window.open('https://wa.me/?text='+encodeURIComponent('LAPORAN KAS AL IKHSAN\nMasuk: '+rupiah(m)+'\nKeluar: '+rupiah(k)+'\nSaldo: '+rupiah(m-k)))}
-tampil();
-</script></body></html>
+let type='masuk';
+let data=JSON.parse(localStorage.getItem('kasMasjid')||'[]');
+function setType(t){type=t;document.getElementById('btnMasuk').classList.toggle('active',t==='masuk');document.getElementById('btnKeluar').classList.toggle('active',t==='keluar');}
+function fmt(n){return 'Rp '+n.toLocaleString('id-ID')}
+function render(){
+let saldo=0;data.forEach(d=>{saldo+= d.type==='masuk'? d.nominal : -d.nominal});
+document.getElementById('saldo').innerText=fmt(saldo);
+document.getElementById('count').innerText=data.length+' transaksi';
+let html='';
+[...data].reverse().forEach(d=>{
+html+=`<div class="item"><div><b>${d.ket}</b><small>${d.type} • ${d.metode} • ${d.tgl}</small></div><div style="text-align:right"><b>${d.type==='masuk'?'+':'-'}${fmt(d.nominal)}</b><br><button class="del" onclick="hapus(${d.id})">X Hapus</button></div></div>`;
+});
+document.getElementById('list').innerHTML=html||'<p style="color:#94a3b8">Belum ada transaksi</p>';
+}
+function simpan(){
+let ket=document.getElementById('ket').value.trim();
+let nom=parseInt(document.getElementById('nom').value);
+let metode=document.getElementById('metode').value;
+if(!ket||!nom){alert('Isi keterangan & nominal dulu, Broo');return;}
+data.push({id:Date.now(),ket,nominal:nom,type,metode,tgl:new Date().toLocaleDateString('id-ID')});
+localStorage.setItem('kasMasjid',JSON.stringify(data));
+document.getElementById('ket').value='';document.getElementById('nom').value='';
+render();alert('Tersimpan!');
+}
+function hapus(id){if(confirm('Hapus transaksi ini?')){data=data.filter(d=>d.id!==id);localStorage.setItem('kasMasjid',JSON.stringify(data));render();}}
+function clearAll(){if(confirm('Yakin hapus SEMUA transaksi? Saldo jadi 0.')){data=[];localStorage.setItem('kasMasjid',JSON.stringify(data));render();}}
+function kirimWA(){
+let saldo=0;data.forEach(d=>{saldo+= d.type==='masuk'? d.nominal : -d.nominal});
+let teks='*REKAP KAS MASJID AL IKHSAN*%0A';
+teks+='Masjid Al Makmur - Cirahab, Lumbir, Banyumas%0A';
+teks+='Saldo: '+fmt(saldo)+'%0A%0A';
+data.forEach(d=>{teks+=`${d.type==='masuk'?'+':'-'} ${fmt(d.nominal)} - ${d.ket} (${d.metode})%0A`;});
+window.open('https://wa.me/?text='+teks,'_blank');
+}
+render();
+</script>
+</body>
+</html>
